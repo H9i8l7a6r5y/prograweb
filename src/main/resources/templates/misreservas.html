@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mis Reservas</title>
+    <style>
+        body{font-family:Arial;background:#667eea;margin:0;padding:20px;}
+        .container{background:white;border-radius:20px;padding:20px;max-width:800px;margin:auto;}
+        table{width:100%;border-collapse:collapse;}
+        th,td{padding:10px;text-align:left;border-bottom:1px solid #ddd;}
+        th{background:#4f46e5;color:white;}
+        button{background:#64748b;color:white;border:none;border-radius:8px;padding:10px;margin-top:20px;cursor:pointer;}
+        .mensaje{text-align:center;padding:40px;color:#64748b;}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📋 Mis Reservas</h1>
+        
+        <div th:if="${reservas.empty}" class="mensaje">
+            <p>✨ Aún no tienes reservas</p>
+            <p>¡Explora nuestros destinos y contrata un guía turístico!</p>
+            <button onclick="location.href='/buscar'">🔍 Buscar Guías</button>
+        </div>
+        
+        <table th:if="${not reservas.empty}">
+            <thead>
+                <tr><th>ID</th><th>Guía</th><th>Destino</th><th>Fecha</th><th>Hora</th><th>Horas</th><th>Total</th></tr>
+            </thead>
+            <tbody>
+                <tr th:each="r : ${reservas}">
+                    <td th:text="${r.id}">?</td>
+                    <td th:text="${r.guia.nombre}">?</td>
+                    <td th:text="${r.guia.destino.ciudad}">?</td>
+                    <td th:text="${r.fecha}">?</td>
+                    <td th:text="${r.hora}">?</td>
+                    <td th:text="${r.horasContratadas}">?</td>
+                    <td th:text="'S/ ' + ${r.costoTotal}">?</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <button onclick="location.href='/menu'">← Volver al Menú</button>
+    </div>
+</body>
+</html>

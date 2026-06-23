@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Registro - Guías Turísticos</title>
+    <style>
+        body{font-family:Arial;background:#667eea;display:flex;justify-content:center;align-items:center;height:100vh;margin:0;}
+        .container{background:white;padding:40px;border-radius:20px;width:350px;text-align:center;}
+        input{width:100%;padding:12px;margin:10px 0;border:1px solid #ddd;border-radius:8px;box-sizing:border-box;}
+        button{width:100%;padding:12px;background:#4f46e5;color:white;border:none;border-radius:8px;cursor:pointer;font-size:16px;}
+        .error{color:red;margin:10px 0;}
+        .success{color:green;margin:10px 0;}
+        a{color:#4f46e5;text-decoration:none;}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🇵🇪 Crear Cuenta</h1>
+        
+        <div th:if="${error}" class="error" th:text="${error}"></div>
+        <div th:if="${success}" class="success" th:text="${success}"></div>
+        
+        <form action="/registro" method="post">
+            <input type="text" name="nombre" placeholder="Nombre completo" required>
+            <input type="email" name="email" placeholder="Correo electrónico" required>
+            <input type="password" name="password" placeholder="Contraseña" required>
+            <button type="submit">Registrarse</button>
+        </form>
+        
+        <p>¿Ya tienes cuenta? <a href="/login">Inicia sesión aquí</a></p>
+    </div>
+</body>
+</html>

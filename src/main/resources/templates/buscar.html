@@ -1,0 +1,58 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Buscar Guías</title>
+    <style>
+        body {
+            font-family: Arial;
+            background-image: url('https://peru.info/archivos/publicacion/70-imagen-1414212822018.jpg'); /* Pon aquí el link de tu imagen */
+            background-size: cover;          /* Hace que la imagen cubra todo el fondo */
+            background-position: center;     /* Centra la imagen */
+            background-attachment: fixed;    /* Mantiene la imagen fija al hacer scroll */
+            background-repeat: no-repeat;    /* Evita que la imagen se repita */
+            margin: 0;
+            padding: 20px;
+        }
+        .container{background:white;border-radius:20px;padding:20px;max-width:800px;margin:auto;}
+        select,button{padding:10px;margin:10px 0;width:100%;}
+        .guia-card{border:1px solid #ddd;border-radius:10px;padding:15px;margin:10px 0;}
+        button{background:#4f46e5;color:white;border:none;border-radius:8px;cursor:pointer;}
+        .menu-btn{background:#64748b;margin-top:20px;}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Buscar Guías Turísticos</h1>
+        
+        <form action="/buscar" method="post">
+            <select name="destinoId" required>
+                <option value="">Seleccione un destino...</option>
+                <option th:each="d : ${destinos}" 
+                        th:value="${d.id}" 
+                        th:text="${d.ciudad}"
+                        th:selected="${d.id == destinoSeleccionado}"></option>
+            </select>
+            <button type="submit">Buscar Guías</button>
+        </form>
+        
+        <div th:if="${guias}">
+            <h2>📋 Guías Disponibles</h2>
+            <div th:each="g : ${guias}" class="guia-card">
+                <h3 th:text="${g.nombre}"></h3>
+                <p>🗣️ Idioma: <strong th:text="${g.idioma}"></strong></p>
+                <p>💰 Tarifa: S/ <strong th:text="${g.tarifaHora}"></strong> por hora</p>
+                <p>⭐ Puntuación: <strong th:text="${g.puntuacion}"></strong>/5</p>
+                <p>📍 Destino: <strong th:text="${g.destino?.ciudad}"></strong></p>
+                <button th:onclick="|location.href='/reservar/${g.id}'|">Reservar</button>
+            </div>
+            <div th:if="${guias.empty}">
+                <p>⚠️ No hay guías disponibles para este destino.</p>
+            </div>
+        </div>
+        
+        <button class="menu-btn" onclick="location.href='/menu'">← Volver al Menú</button>
+    </div>
+</body>
+</html>

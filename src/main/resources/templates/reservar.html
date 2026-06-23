@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Confirmar Reserva</title>
+    <style>
+        body{font-family:Arial;background:#667eea;display:flex;justify-content:center;align-items:center;height:100vh;}
+        .container{background:white;padding:30px;border-radius:20px;width:400px;}
+        input,select,button{width:100%;padding:10px;margin:10px 0;border:1px solid #ddd;border-radius:8px;}
+        button{background:#4f46e5;color:white;cursor:pointer;}
+        .total{font-size:24px;color:#2e7d32;font-weight:bold;}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📅 Confirmar Reserva</h1>
+        
+        <p><strong>Guía:</strong> <span th:text="${guia.nombre}"></span></p>
+        <p><strong>Destino:</strong> <span th:text="${guia.destino.ciudad}"></span></p>
+        <p><strong>Tarifa:</strong> S/ <span th:text="${guia.tarifaHora}"></span> por hora</p>
+        
+        <form action="/confirmar-reserva" method="post">
+            <input type="hidden" name="guiaId" th:value="${guia.id}">
+            
+            <input type="date" name="fecha" required>
+            
+            <select name="hora" required>
+                <option value="09:00">09:00 AM</option>
+                <option value="10:00">10:00 AM</option>
+                <option value="11:00">11:00 AM</option>
+                <option value="14:00">02:00 PM</option>
+                <option value="15:00">03:00 PM</option>
+                <option value="16:00">04:00 PM</option>
+            </select>
+            
+            <input type="number" name="horas" min="1" max="8" value="2" required>
+            
+            <button type="submit">Confirmar Reserva</button>
+        </form>
+        
+        <a href="/buscar">← Volver</a>
+    </div>
+</body>
+</html>

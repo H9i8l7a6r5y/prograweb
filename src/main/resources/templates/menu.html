@@ -1,0 +1,77 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Menú Principal</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Roboto:wght@400&display=swap');
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+      
+        .gif-fondo {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Esto estira el GIF para que ocupe todo sin espacios */
+            z-index: -1;       /* Esto lo envía al fondo */
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border-radius: 30px;
+            text-align: center;
+            width: 350px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .btn-buscar { width: 80%; background: #4ade80; }
+        .btn-reservas { width: 90%; background: #6fe8d0; }
+        .btn-logout { width: 60%; background: #5ac4f2; }
+
+        button {
+            padding: 15px;
+            margin: 10px 0;
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            filter: brightness(1.2);
+            transform: scale(1.05);
+        }
+
+        h1 {
+       
+        font-family: 'Poppins', sans-serif;
+        color: #1e293b;
+    }
+    </style>
+</head>
+<body>
+
+    <img src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExYzM1NzAydGk3bmQ2OTI2bW5mNnk4ejM3eWJyMDZyMTRxbWJndG51MSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/geF19mYy3WhjOORozx/giphy.gif" class="gif-fondo" alt="Fondo animado">
+
+    <div class="container">
+        <h1>INTI ROUTES Bienvenido</h1>
+        <button class="btn-buscar" onclick="location.href='/buscar'">🔍 Buscar Guías</button>
+        <button class="btn-reservas" onclick="location.href='/misreservas'">📋 Mis Reservas</button>
+        <button class="btn-logout" onclick="location.href='/logout'">🚪 Cerrar Sesión</button>
+    </div>
+</body>
+</html>
