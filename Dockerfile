@@ -1,8 +1,23 @@
-FROM maven:3.8.1-openjdk-17 AS build
-COPY . .
+# ===== CONSTRUCCIÓN (BUILD STAGE) =====
+FROM maven:3.8.4-openjdk-17-slim AS build
+WORKDIR /app
+
+# Copiar archivos de configuración
+COPY pom.xml .
+COPY src ./src
+
+# Compilar y empaquetar (saltando pruebas)
 RUN mvn clean package -DskipTests
 
-FROM openjdk:17-jdk-slim
-COPY --from=build /target/guiasweb-0.0.1-SNAPSHOT.jar app.jar
+# ===== EJECUCIÓN (RUNTIME STAGE) =====
+FROM eclipse-temurin:17-jre-alpine
+WORKDIR /app
+
+# Copiar el JAR desde la etapa de construcción
+COPY --from=build /app/target/*.jar app.jar
+
+# Puerto de la aplicación
 EXPOSE 8080
+
+# Comando para ejecutar
 ENTRYPOINT ["java", "-jar", "app.jar"]
