@@ -3,26 +3,141 @@
 <head>
     <title>Formulario Guía</title>
     <style>
-        body { font-family: Arial; margin: 0; padding: 20px; background: #f4f4f4; }
-        .container { max-width: 600px; margin: 0 auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .header { background: #2c3e50; color: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
-        .header a { color: #e74c3c; text-decoration: none; }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; font-weight: bold; }
-        input, select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
-        .btn { padding: 10px 30px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; }
-        .btn-save { background: #2c3e50; color: white; }
-        .btn-save:hover { background: #1a252f; }
-        .btn-cancel { background: #95a5a6; color: white; text-decoration: none; display: inline-block; padding: 10px 30px; border-radius: 5px; }
-        .btn-cancel:hover { background: #7f8c8d; }
-        .buttons { display: flex; gap: 10px; margin-top: 20px; }
-        .required { color: red; }
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            margin: 0; 
+            padding: 20px; 
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+        
+        .container { 
+            max-width: 700px; 
+            margin: 0 auto; 
+            background: white; 
+            padding: 40px; 
+            border-radius: 20px; 
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+        }
+        
+        .header { 
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: white; 
+            padding: 20px 25px; 
+            border-radius: 15px; 
+            margin-bottom: 30px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+        }
+        
+        .header a { color: #e74c3c; text-decoration: none; font-weight: 600; }
+        .header a:hover { color: #ff6b6b; }
+        
+        h2 { 
+            color: #2c3e50; 
+            margin-bottom: 25px;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .form-group { margin-bottom: 20px; }
+        label { 
+            display: block; 
+            margin-bottom: 8px; 
+            font-weight: 600; 
+            color: #2c3e50;
+            font-size: 14px;
+        }
+        input, select { 
+            width: 100%; 
+            padding: 12px 15px; 
+            border: 2px solid #e0e0e0; 
+            border-radius: 10px; 
+            box-sizing: border-box;
+            font-size: 14px;
+            transition: all 0.3s;
+            font-family: 'Poppins', sans-serif;
+        }
+        input:focus, select:focus {
+            border-color: #3498db;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+        
+        .btn { 
+            padding: 12px 35px; 
+            border: none; 
+            border-radius: 10px; 
+            cursor: pointer; 
+            font-size: 16px; 
+            font-weight: 600;
+            transition: all 0.3s;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .btn-save { 
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: white; 
+        }
+        .btn-save:hover { 
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(44, 62, 80, 0.3);
+        }
+        
+        .btn-cancel { 
+            background: #ecf0f1; 
+            color: #2c3e50; 
+            text-decoration: none; 
+            display: inline-block; 
+            padding: 12px 35px; 
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .btn-cancel:hover { 
+            background: #d5dbdb;
+            transform: translateY(-2px);
+        }
+        
+        .buttons { display: flex; gap: 15px; margin-top: 30px; flex-wrap: wrap; }
+        .required { color: #e74c3c; }
+        
+        /* Vista previa de la foto */
+        .foto-preview {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #3498db;
+            margin: 10px 0;
+            display: block;
+        }
+        .foto-input-group {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .foto-input-group input {
+            flex: 1;
+        }
+        .hint {
+            font-size: 12px;
+            color: #7f8c8d;
+            margin-top: 5px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1 style="margin:0;">📝 Formulario</h1>
+            <h1 style="margin:0; font-size: 20px;">📝 Formulario</h1>
             <span>👤 <span th:text="${usuario.nombre}">Admin</span> | <a href="/logout">Cerrar Sesión</a></span>
         </div>
         
@@ -30,8 +145,6 @@
         <h2 th:if="${guia != null && guia.id != null}">✏️ Editar Guía</h2>
         
         <form th:action="@{/admin/guias/guardar}" th:object="${guia}" method="post">
-            
-            <!-- Campo oculto para el ID -->
             <input type="hidden" th:field="*{id}">
             
             <div class="form-group">
@@ -45,7 +158,7 @@
             </div>
             
             <div class="form-group">
-                <label>Tarifa por hora <span class="required">*</span></label>
+                <label>Tarifa por hora (S/) <span class="required">*</span></label>
                 <input type="number" step="0.01" th:field="*{tarifaHora}" required placeholder="0.00">
             </div>
             
@@ -60,6 +173,18 @@
                     <option th:value="1">✅ Disponible</option>
                     <option th:value="0">❌ No disponible</option>
                 </select>
+            </div>
+            
+            <!-- ========== NUEVO CAMPO: FOTO ========== -->
+            <div class="form-group">
+                <label>📸 URL de la foto</label>
+                <div class="foto-input-group">
+                    <input type="text" th:field="*{foto}" placeholder="https://ejemplo.com/foto.jpg">
+                </div>
+                <div th:if="${guia.foto != null}">
+                    <img th:src="${guia.foto}" alt="Foto" class="foto-preview">
+                </div>
+                <div class="hint">💡 Puedes usar imágenes de: https://i.pravatar.cc/150?img=1 (cambia el número)</div>
             </div>
             
             <div class="buttons">

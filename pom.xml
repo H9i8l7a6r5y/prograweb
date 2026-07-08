@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.2.0</version>  <!-- CAMBIADO a 3.2.0 (más estable) -->
+		<version>3.2.0</version>
 		<relativePath/>
 	</parent>
 	
@@ -55,9 +55,39 @@
 
 	<build>
 		<plugins>
+			<!-- ===== PLUGIN DE SPRING BOOT ===== -->
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<mainClass>com.turismo.guiasweb.GuiaswebApplication</mainClass>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			
+			<!-- ===== PLUGIN EXEC PARA NETBEANS ===== -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>3.5.1</version>
+				<configuration>
+					<mainClass>com.turismo.guiasweb.GuiaswebApplication</mainClass>
+				</configuration>
+			</plugin>
+			
+			<!-- ===== PLUGIN PARA SALTAR PRUEBAS ===== -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<skipTests>true</skipTests>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

@@ -1,3 +1,4 @@
+
 package com.turismo.guiasweb.model;
 
 import jakarta.persistence.*;
@@ -9,7 +10,7 @@ public class Guia {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;  // ← CAMBIAR de int a Integer
+    private Integer id;
     
     private String nombre;
     private String idioma;
@@ -18,7 +19,10 @@ public class Guia {
     private BigDecimal tarifaHora;
     
     private BigDecimal puntuacion;
-    private Integer disponibilidad;  // ← CAMBIAR de int a Integer
+    private Integer disponibilidad;
+    
+    // ========== NUEVO CAMPO FOTO ==========
+    private String foto = "https://via.placeholder.com/150";
     
     @ManyToOne
     @JoinColumn(name = "id_destino")
@@ -57,7 +61,10 @@ public class Guia {
     public Destino getDestino() { return destino; }
     public void setDestino(Destino destino) { this.destino = destino; }
     
-    // ========== MÉTODO PARA DISPONIBILIDAD BOOLEAN ==========
+    // ========== GETTER Y SETTER PARA FOTO ==========
+    public String getFoto() { return foto; }
+    public void setFoto(String foto) { this.foto = foto; }
+    
     public boolean isDisponible() {
         return disponibilidad != null && disponibilidad == 1;
     }

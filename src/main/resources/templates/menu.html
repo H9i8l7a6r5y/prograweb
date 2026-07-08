@@ -1,105 +1,488 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Menú Principal</title>
+    <title>INTI ROUTES</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Roboto:wght@400&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         body {
-            font-family: 'Roboto', sans-serif;
-            margin: 0;
-            padding: 0;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .gif-fondo {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            z-index: -1;
-        }
-
-        .container {
-            background: rgba(255, 255, 255, 0.9);
-            padding: 40px;
-            border-radius: 30px;
-            text-align: center;
-            width: 400px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-        }
-
-        button {
-            padding: 15px;
-            margin: 10px 0;
-            color: white;
-            border: none;
-            border-radius: 15px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: 0.3s;
-            width: 80%;
-        }
-
-        button:hover {
-            filter: brightness(1.2);
-            transform: scale(1.05);
-        }
-
-        .btn-buscar { background: #4ade80; }
-        .btn-reservas { background: #6fe8d0; }
-        .btn-logout { background: #5ac4f2; }
-        .btn-admin { background: #e67e22; }  /* NUEVO: color naranja para admin */
-
-        h1 {
-            font-family: 'Poppins', sans-serif;
-            color: #1e293b;
+            font-family: 'Inter', sans-serif;
+            background: #f0f4f8;
+            min-height: 100vh;
         }
         
-        .user-info {
-            color: #555;
-            margin-bottom: 15px;
+        /* ===== BARRA SUPERIOR ===== */
+        .navbar {
+            background: linear-gradient(135deg, #0f1724, #1a2a3a);
+            padding: 0 30px;
+            height: 65px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 20px rgba(15, 23, 36, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 800;
+        }
+        
+        .logo i {
+            color: #fbbf24;
+            font-size: 22px;
+        }
+        
+        .logo span {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .user-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 6px 14px 6px 10px;
+            border-radius: 30px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.08);
+            cursor: pointer;
+            transition: all 0.3s;
+            color: white;
+        }
+        
+        .user-btn:hover {
+            background: rgba(255,255,255,0.12);
+        }
+        
+        .user-btn i {
+            font-size: 28px;
+            color: #fbbf24;
+        }
+        
+        .user-btn .name {
+            font-weight: 600;
             font-size: 14px;
         }
         
-        .user-info strong {
-            color: #2c3e50;
+        .user-btn .arrow {
+            color: #94a3b8;
+            font-size: 10px;
         }
         
-        .separator {
-            border-top: 1px solid #ddd;
-            margin: 15px 0;
+        /* ===== MENÚ USUARIO (dropdown) ===== */
+        .user-menu {
+            display: none;
+            position: absolute;
+            top: 55px;
+            right: 0;
+            background: white;
+            border-radius: 14px;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.15);
+            min-width: 200px;
+            padding: 8px 0;
+            z-index: 1001;
+        }
+        
+        .user-menu.show {
+            display: block;
+        }
+        
+        .user-menu .user-header {
+            padding: 12px 20px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        
+        .user-menu .user-header .email {
+            font-size: 13px;
+            color: #64748b;
+        }
+        
+        .user-menu a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 20px;
+            color: #1a2a3a;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        
+        .user-menu a:hover {
+            background: #f1f5f9;
+        }
+        
+        .user-menu a i {
+            color: #64748b;
+            width: 18px;
+        }
+        
+        .user-menu a.logout {
+            color: #dc2626;
+        }
+        .user-menu a.logout i {
+            color: #dc2626;
+        }
+        
+        .user-dropdown {
+            position: relative;
+        }
+        
+        /* ===== MENÚ SECUNDARIO (CENTRO) ===== */
+        .sub-menu {
+            background: white;
+            padding: 12px 20px;
+            border-bottom: 1px solid #e2e8f0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            position: sticky;
+            top: 65px;
+            z-index: 999;
+        }
+        
+        .sub-menu a {
+            padding: 8px 24px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            border: none;
+            background: none;
+        }
+        
+        .sub-menu a i {
+            font-size: 15px;
+        }
+        
+        .sub-menu a.btn-buscar {
+            color: #1a2a3a;
+            background: #f1f5f9;
+        }
+        .sub-menu a.btn-buscar:hover {
+            background: #e2e8f0;
+            transform: translateY(-2px);
+        }
+        .sub-menu a.btn-buscar i {
+            color: #4f46e5;
+        }
+        
+        .sub-menu a.btn-reservas {
+            color: #1a2a3a;
+            background: #f1f5f9;
+        }
+        .sub-menu a.btn-reservas:hover {
+            background: #e2e8f0;
+            transform: translateY(-2px);
+        }
+        .sub-menu a.btn-reservas i {
+            color: #22c55e;
+        }
+        
+        .sub-menu a.btn-admin {
+            color: white;
+            background: linear-gradient(135deg, #f59e0b, #fbbf24);
+        }
+        .sub-menu a.btn-admin:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(251, 191, 36, 0.3);
+        }
+        .sub-menu a.btn-admin i {
+            color: #0f1724;
+        }
+        
+        /* ===== HERO ===== */
+        .hero {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: calc(100vh - 135px);
+            background: url('https://peru.info/archivos/publicacion/70-imagen-1414212822018.jpg') center/cover fixed;
+            padding: 40px 20px;
+        }
+        
+        .hero .overlay {
+            background: rgba(0,0,0,0.55);
+            backdrop-filter: blur(4px);
+            padding: 50px 40px;
+            border-radius: 30px;
+            text-align: center;
+            max-width: 550px;
+            color: white;
+        }
+        
+        .hero .overlay h1 {
+            font-size: 38px;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+        
+        .hero .overlay h1 span {
+            color: #fbbf24;
+        }
+        
+        .hero .overlay p {
+            font-size: 16px;
+            color: #e2e8f0;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+        
+        /* ===== PANEL FLOTANTE ===== */
+        .overlay-panel {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(6px);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .overlay-panel.show {
+            display: flex;
+        }
+        
+        .overlay-panel .panel-content {
+            background: white;
+            border-radius: 24px;
+            max-width: 650px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            padding: 30px 35px;
+            position: relative;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.3);
+            animation: slideUp 0.3s ease;
+        }
+        
+        .overlay-panel .panel-content .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 28px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: none;
+            border: none;
+        }
+        
+        .overlay-panel .panel-content .close-btn:hover {
+            color: #dc2626;
+            transform: rotate(90deg);
+        }
+        
+        .overlay-panel .panel-content h2 {
+            font-size: 22px;
+            color: #0f1724;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .overlay-panel .panel-content h2 i {
+            color: #fbbf24;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .navbar { padding: 0 16px; height: 60px; }
+            .logo { font-size: 16px; }
+            .logo i { font-size: 18px; }
+            .sub-menu { padding: 10px 12px; gap: 4px; top: 60px; }
+            .sub-menu a { padding: 6px 14px; font-size: 13px; }
+            .hero { min-height: calc(100vh - 115px); }
+            .hero .overlay { padding: 30px 20px; }
+            .hero .overlay h1 { font-size: 26px; }
+            .overlay-panel .panel-content { padding: 20px; margin: 10px; }
+        }
+        
+        .panel-content::-webkit-scrollbar {
+            width: 6px;
+        }
+        .panel-content::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 10px;
+        }
+        .panel-content::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+        .panel-content::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
         }
     </style>
 </head>
 <body>
 
-    <img src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExYzM1NzAydGk3bmQ2OTI2bW5mNnk4ejM3eWJyMDZyMTRxbWJndG51MSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/geF19mYy3WhjOORozx/giphy.gif" class="gif-fondo" alt="Fondo animado">
+    <!-- ===== BARRA SUPERIOR ===== -->
+    <nav class="navbar">
+        <a href="/menu" class="logo">
+            <i class="fas fa-compass"></i>
+            <span>INTI ROUTES</span>
+        </a>
 
-    <div class="container">
-        <h1>🌍 INTI ROUTES</h1>
-        
-        <!-- Mostrar nombre del usuario -->
-        <div class="user-info">
-            👤 Bienvenido, <strong th:text="${usuario.nombre}">Usuario</strong>
+        <div class="user-dropdown">
+            <div class="user-btn" onclick="toggleUserMenu()">
+                <i class="fas fa-user-circle"></i>
+                <span class="name" th:text="${usuario.nombre}">Usuario</span>
+                <span class="arrow">▼</span>
+            </div>
+            <div class="user-menu" id="userMenu">
+                <div class="user-header">
+                    <div style="font-weight:600; color:#0f1724;" th:text="${usuario.nombre}">Usuario</div>
+                    <div class="email" th:text="${usuario.email}">email@mail.com</div>
+                    <div style="font-size:12px; color:#94a3b8; margin-top:4px;" th:text="${usuario.rol == 'ADMIN' ? '🔑 Administrador' : '👤 Usuario'}"></div>
+                </div>
+                <a href="/misreservas"><i class="fas fa-receipt"></i> Mis Reservas</a>
+                <a href="/logout" class="logout"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
+            </div>
         </div>
-        
-        <button class="btn-buscar" onclick="location.href='/buscar'">🔍 Buscar Guías</button>
-        <button class="btn-reservas" onclick="location.href='/misreservas'">📋 Mis Reservas</button>
-        
-        <!-- ✅ NUEVO: Botón de Admin SOLO si el usuario es ADMIN -->
-        <div th:if="${usuario.rol == 'ADMIN'}">
-            <div class="separator"></div>
-            <button class="btn-admin" onclick="location.href='/admin/dashboard'">🔧 Panel de Administración</button>
-        </div>
-        
-        <div class="separator"></div>
-        <button class="btn-logout" onclick="location.href='/logout'">🚪 Cerrar Sesión</button>
+    </nav>
+
+    <!-- ===== MENÚ SECUNDARIO (CENTRO) ===== -->
+    <div class="sub-menu">
+        <a href="#" class="btn-buscar" onclick="abrirPanel('buscarPanel')">
+            <i class="fas fa-search"></i> Buscar
+        </a>
+        <a href="#" class="btn-reservas" onclick="abrirPanel('reservasPanel')">
+            <i class="fas fa-calendar-check"></i> Reservas
+        </a>
+        <a href="/admin/dashboard" class="btn-admin" th:if="${usuario.rol == 'ADMIN'}">
+            <i class="fas fa-shield-halved"></i> Admin
+        </a>
     </div>
+
+    <!-- ===== PANEL: BUSCAR ===== -->
+    <div class="overlay-panel" id="buscarPanel" onclick="cerrarPanel(event, 'buscarPanel')">
+        <div class="panel-content" onclick="event.stopPropagation()">
+            <button class="close-btn" onclick="cerrarPanel(null, 'buscarPanel')">✕</button>
+            <h2><i class="fas fa-search"></i> Buscar Guías</h2>
+            
+            <form action="/buscar" method="post" style="display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
+                <select name="destinoId" required style="flex:1; min-width:180px; padding:12px 16px; border:2px solid #e2e8f0; border-radius:12px; font-size:14px;">
+                    <option value="">Selecciona un destino...</option>
+                    <option th:each="d : ${destinos}" th:value="${d.id}" th:text="${d.ciudad}"></option>
+                </select>
+                <button type="submit" style="padding:12px 30px; background:linear-gradient(135deg,#4f46e5,#6366f1); color:white; border:none; border-radius:12px; font-weight:600; cursor:pointer;">
+                    Buscar
+                </button>
+            </form>
+
+            <div th:if="${guias != null && !guias.empty}" style="margin-top:20px;">
+                <h3 style="font-size:16px; color:#1a2a3a;">📋 <span th:text="${guias.size()}">0</span> guías encontrados</h3>
+                <div th:each="g : ${guias}" style="border:1px solid #e2e8f0; border-radius:14px; padding:15px; margin-top:12px; display:flex; align-items:center; gap:15px;">
+                    <img th:src="${g.foto}" style="width:50px; height:50px; border-radius:50%; object-fit:cover;">
+                    <div style="flex:1;">
+                        <div style="font-weight:600;" th:text="${g.nombre}">Juan Pérez</div>
+                        <div style="font-size:13px; color:#64748b;">🗣️ <span th:text="${g.idioma}">Español</span></div>
+                        <div style="font-size:13px; color:#16a34a;">💰 S/ <span th:text="${g.tarifaHora}">50.00</span>/h</div>
+                    </div>
+                    <a th:href="'/reservar/' + ${g.id}" style="padding:6px 16px; background:#22c55e; color:white; border-radius:8px; text-decoration:none; font-weight:600; font-size:13px;">Reservar</a>
+                </div>
+            </div>
+            <div th:if="${guias != null && guias.empty}" style="text-align:center; padding:30px; color:#94a3b8;">
+                No hay guías disponibles para este destino
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== PANEL: RESERVAS ===== -->
+    <div class="overlay-panel" id="reservasPanel" onclick="cerrarPanel(event, 'reservasPanel')">
+        <div class="panel-content" onclick="event.stopPropagation()">
+            <button class="close-btn" onclick="cerrarPanel(null, 'reservasPanel')">✕</button>
+            <h2><i class="fas fa-calendar-check"></i> Mis Reservas</h2>
+            
+            <div th:if="${reservas != null && !reservas.empty}">
+                <div th:each="r : ${reservas}" style="border:1px solid #e2e8f0; border-radius:14px; padding:16px; margin-bottom:12px;">
+                    <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;">
+                        <div>
+                            <div style="font-weight:600;">📅 <span th:text="${r.fecha}">10/07/2026</span></div>
+                            <div style="font-size:14px; color:#64748b;">🕐 <span th:text="${r.hora}">10:00</span></div>
+                            <div style="font-size:14px; color:#64748b;">⏱️ <span th:text="${r.horasContratadas}">3</span> horas</div>
+                        </div>
+                        <div style="text-align:right;">
+                            <div style="font-weight:700; color:#0f1724;">S/ <span th:text="${r.costoTotal}">150.00</span></div>
+                            <div style="font-size:12px; color:#94a3b8;">Guía ID: <span th:text="${r.idGuia}">1</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div th:if="${reservas == null || reservas.empty}" style="text-align:center; padding:40px 20px; color:#94a3b8;">
+                <div style="font-size:48px; margin-bottom:12px;">📭</div>
+                No tienes reservas aún
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== HERO ===== -->
+    <section class="hero">
+        <div class="overlay">
+            <h1>🌄 <span>INTI ROUTES</span></h1>
+            <p>Descubre Perú con los mejores guías turísticos. Vive experiencias auténticas y culturales.</p>
+        </div>
+    </section>
+
+    <!-- ===== SCRIPT ===== -->
+    <script>
+        function abrirPanel(id) {
+            document.getElementById(id).classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function cerrarPanel(event, id) {
+            if (event && event.target !== event.currentTarget) return;
+            document.getElementById(id).classList.remove('show');
+            document.body.style.overflow = 'auto';
+        }
+        
+        function toggleUserMenu() {
+            document.getElementById('userMenu').classList.toggle('show');
+        }
+        
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.user-dropdown')) {
+                document.getElementById('userMenu').classList.remove('show');
+            }
+        });
+    </script>
+
 </body>
 </html>
