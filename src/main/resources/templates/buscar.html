@@ -1,58 +1,519 @@
-
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Buscar Guías</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         body {
-            font-family: Arial;
-            background-image: url('https://peru.info/archivos/publicacion/70-imagen-1414212822018.jpg'); /* Pon aquí el link de tu imagen */
-            background-size: cover;          /* Hace que la imagen cubra todo el fondo */
-            background-position: center;     /* Centra la imagen */
-            background-attachment: fixed;    /* Mantiene la imagen fija al hacer scroll */
-            background-repeat: no-repeat;    /* Evita que la imagen se repita */
-            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background-image: url('https://peru.info/archivos/publicacion/70-imagen-1414212822018.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            min-height: 100vh;
             padding: 20px;
         }
-        .container{background:white;border-radius:20px;padding:20px;max-width:800px;margin:auto;}
-        select,button{padding:10px;margin:10px 0;width:100%;}
-        .guia-card{border:1px solid #ddd;border-radius:10px;padding:15px;margin:10px 0;}
-        button{background:#4f46e5;color:white;border:none;border-radius:8px;cursor:pointer;}
-        .menu-btn{background:#64748b;margin-top:20px;}
+        
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 30px;
+            max-width: 1000px;
+            margin: 0 auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            backdrop-filter: blur(10px);
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            color: #1e293b;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .header .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .header .user-info a {
+            color: #64748b;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            padding: 8px 16px;
+            border-radius: 10px;
+        }
+        
+        .header .user-info a:hover {
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+        
+        .header .user-info .logout {
+            color: #ef4444;
+        }
+        .header .user-info .logout:hover {
+            background: #fef2f2;
+        }
+        
+        /* ===== BÚSQUEDA ===== */
+        .search-section {
+            background: #f8fafc;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .search-section h2 {
+            font-size: 18px;
+            color: #1e293b;
+            margin-bottom: 15px;
+        }
+        
+        .search-form {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .search-form select {
+            flex: 1;
+            min-width: 200px;
+            padding: 14px 20px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 14px;
+            font-family: 'Poppins', sans-serif;
+            background: white;
+            transition: all 0.3s;
+        }
+        
+        .search-form select:focus {
+            border-color: #4f46e5;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+        
+        .search-form button {
+            padding: 14px 35px;
+            background: linear-gradient(135deg, #4f46e5, #6366f1);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .search-form button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(79, 70, 229, 0.3);
+        }
+        
+        /* ===== CARD GRID ===== */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+            transition: all 0.3s;
+            border: 1px solid #f1f5f9;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+        }
+        
+        /* ===== FOTO ===== */
+        .card-header {
+            padding: 25px 20px 15px;
+            text-align: center;
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+        }
+        
+        .card-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid white;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            background: #e2e8f0;
+        }
+        
+        .card-body {
+            padding: 20px;
+        }
+        
+        .card-body h3 {
+            font-size: 20px;
+            color: #1e293b;
+            margin-bottom: 4px;
+        }
+        
+        .card-body .idioma {
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+        
+        .card-body .info {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            font-size: 13px;
+            margin-bottom: 15px;
+        }
+        
+        .card-body .info span {
+            background: #f1f5f9;
+            padding: 4px 14px;
+            border-radius: 20px;
+            color: #1e293b;
+        }
+        
+        .card-body .info .precio {
+            background: #dbeafe;
+            color: #1e40af;
+            font-weight: 600;
+        }
+        
+        .card-body .info .puntuacion {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .badge-disponible {
+            color: #16a34a;
+            font-weight: 600;
+        }
+        .badge-no-disponible {
+            color: #dc2626;
+            font-weight: 600;
+        }
+        
+        .btn-reservar {
+            display: inline-block;
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: white;
+            padding: 10px 25px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .btn-reservar:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(34, 197, 94, 0.3);
+        }
+        
+        /* ===== COMENTARIOS ===== */
+        .comentarios-section {
+            margin-top: 18px;
+            padding-top: 15px;
+            border-top: 2px solid #f1f5f9;
+        }
+        
+        .comentarios-section h4 {
+            font-size: 14px;
+            color: #1e293b;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .comentario-item {
+            background: #f8fafc;
+            padding: 10px 15px;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            font-size: 13px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .comentario-item .user {
+            font-weight: 600;
+            color: #1e293b;
+            min-width: 80px;
+        }
+        
+        .comentario-item .texto {
+            color: #475569;
+            flex: 1;
+        }
+        
+        .comentario-item .fecha {
+            font-size: 11px;
+            color: #94a3b8;
+            white-space: nowrap;
+        }
+        
+        .comentario-item .admin-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .comentario-item .admin-actions a {
+            font-size: 12px;
+            text-decoration: none;
+            padding: 2px 10px;
+            border-radius: 6px;
+            transition: all 0.3s;
+        }
+        
+        .comentario-item .admin-actions .edit {
+            color: #2563eb;
+            background: #dbeafe;
+        }
+        .comentario-item .admin-actions .edit:hover {
+            background: #bfdbfe;
+        }
+        
+        .comentario-item .admin-actions .delete {
+            color: #dc2626;
+            background: #fee2e2;
+        }
+        .comentario-item .admin-actions .delete:hover {
+            background: #fecaca;
+        }
+        
+        .no-comentarios {
+            color: #94a3b8;
+            font-size: 13px;
+            font-style: italic;
+        }
+        
+        /* ===== FORMULARIO DE COMENTARIO ===== */
+        .comentario-form {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .comentario-form input {
+            flex: 1;
+            min-width: 150px;
+            padding: 10px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 13px;
+            transition: all 0.3s;
+        }
+        
+        .comentario-form input:focus {
+            border-color: #4f46e5;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+        
+        .comentario-form button {
+            padding: 10px 25px;
+            background: linear-gradient(135deg, #4f46e5, #6366f1);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 13px;
+            font-family: 'Poppins', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .comentario-form button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(79, 70, 229, 0.3);
+        }
+        
+        .empty {
+            text-align: center;
+            padding: 50px 20px;
+            color: #94a3b8;
+            grid-column: 1 / -1;
+        }
+        .empty .icon {
+            font-size: 48px;
+            display: block;
+            margin-bottom: 15px;
+        }
+        
+        .volver-btn {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 12px 30px;
+            background: #64748b;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        
+        .volver-btn:hover {
+            background: #475569;
+            transform: translateY(-2px);
+        }
+        
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 600px) {
+            .container { padding: 15px; }
+            .header h1 { font-size: 22px; }
+            .card-grid { grid-template-columns: 1fr; }
+            .search-form select { min-width: 100%; }
+            .search-form button { width: 100%; }
+            .comentario-item { flex-direction: column; align-items: stretch; }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Buscar Guías Turísticos</h1>
         
-        <form action="/buscar" method="post">
-            <select name="destinoId" required>
-                <option value="">Seleccione un destino...</option>
-                <option th:each="d : ${destinos}" 
-                        th:value="${d.id}" 
-                        th:text="${d.ciudad}"
-                        th:selected="${d.id == destinoSeleccionado}"></option>
-            </select>
-            <button type="submit">Buscar Guías</button>
-        </form>
-        
-        <div th:if="${guias}">
-            <h2>📋 Guías Disponibles</h2>
-            <div th:each="g : ${guias}" class="guia-card">
-                <h3 th:text="${g.nombre}"></h3>
-                <p>🗣️ Idioma: <strong th:text="${g.idioma}"></strong></p>
-                <p>💰 Tarifa: S/ <strong th:text="${g.tarifaHora}"></strong> por hora</p>
-                <p>⭐ Puntuación: <strong th:text="${g.puntuacion}"></strong>/5</p>
-                <p>📍 Destino: <strong th:text="${g.destino?.ciudad}"></strong></p>
-                <button th:onclick="|location.href='/reservar/${g.id}'|">Reservar</button>
-            </div>
-            <div th:if="${guias.empty}">
-                <p>⚠️ No hay guías disponibles para este destino.</p>
+        <!-- ===== HEADER ===== -->
+        <div class="header">
+            <h1>🔍 Buscar Guías</h1>
+            <div class="user-info">
+                <span>👤 <strong th:text="${usuario.nombre}">Usuario</strong></span>
+                <a href="/menu">🏠 Menú</a>
+                <a href="/logout" class="logout">Cerrar</a>
             </div>
         </div>
         
-        <button class="menu-btn" onclick="location.href='/menu'">← Volver al Menú</button>
+        <!-- ===== BÚSQUEDA ===== -->
+        <div class="search-section">
+            <h2>📋 Buscar por destino</h2>
+            <form action="/buscar" method="post" class="search-form">
+                <select name="destinoId" required>
+                    <option value="">Selecciona un destino...</option>
+                    <option th:each="d : ${destinos}" 
+                            th:value="${d.id}" 
+                            th:text="${d.ciudad}"
+                            th:selected="${d.id == destinoSeleccionado}"></option>
+                </select>
+                <button type="submit">🔍 Buscar</button>
+            </form>
+        </div>
+        
+        <!-- ===== RESULTADOS ===== -->
+        <div th:if="${guias != null}">
+            <h2 style="font-size:18px; color:#1e293b; margin-bottom:15px;" th:text="'📋 ' + ${guias.size()} + ' guías encontrados'">📋 Guías Disponibles</h2>
+            
+            <div class="card-grid">
+                <div th:each="g : ${guias}" class="card">
+                    
+                    <!-- Foto -->
+                    <div class="card-header">
+                        <img th:src="${g.foto}" alt="Foto" class="card-avatar">
+                    </div>
+                    
+                    <!-- Información -->
+                    <div class="card-body">
+                        <h3 th:text="${g.nombre}">Juan Pérez</h3>
+                        <div class="idioma">🗣️ <span th:text="${g.idioma}">Español, Inglés</span></div>
+                        
+                        <div class="info">
+                            <span class="precio">💰 S/ <span th:text="${g.tarifaHora}">50.00</span>/h</span>
+                            <span class="puntuacion">⭐ <span th:text="${g.puntuacion}">4.8</span>/5</span>
+                            <span th:class="${g.disponible} ? 'badge-disponible' : 'badge-no-disponible'">
+                                <span th:text="${g.disponible} ? '✅ Disponible' : '❌ No disponible'">✅ Disponible</span>
+                            </span>
+                        </div>
+                        
+                        <a th:href="'/reservar/' + ${g.id}" class="btn-reservar">📅 Reservar</a>
+                        
+                        <!-- ===== COMENTARIOS ===== -->
+                        <div class="comentarios-section">
+                            <h4>💬 Comentarios</h4>
+                            
+                            <!-- Lista de comentarios -->
+                            <div th:each="c : ${comentariosMap?.get(g.id)}" class="comentario-item">
+                                <span class="user" th:text="${c.nombreUsuario}">Usuario</span>
+                                <span class="texto" th:text="${c.comentario}">Excelente guía</span>
+                                <span class="fecha" th:text="${#temporals.format(c.fecha, 'dd/MM/yyyy HH:mm')}">08/07/2026 10:30</span>
+                                
+                                <!-- Acciones de admin (solo visibles para ADMIN) -->
+                                <div class="admin-actions" th:if="${usuario != null && usuario.rol == 'ADMIN'}">
+                                    <a th:href="'/comentarios/editar/' + ${c.id}" class="edit">✏️</a>
+                                    <a th:href="'/comentarios/eliminar/' + ${c.id}" class="delete" 
+                                       onclick="return confirm('¿Eliminar este comentario?')">🗑️</a>
+                                </div>
+                            </div>
+                            
+                            <!-- Mensaje si no hay comentarios -->
+                            <div th:if="${comentariosMap?.get(g.id) == null || comentariosMap?.get(g.id).isEmpty()}" 
+                                 class="no-comentarios">
+                                💬 No hay comentarios aún. Sé el primero en comentar.
+                            </div>
+                            
+                            <!-- Formulario para agregar comentario -->
+                            <div th:if="${usuario != null}" class="comentario-form">
+                                <form th:action="@{/comentarios/agregar}" method="post" style="display:flex; gap:10px; width:100%; flex-wrap:wrap;">
+                                    <input type="hidden" name="idGuia" th:value="${g.id}">
+                                    <input type="text" name="comentario" placeholder="Escribe tu comentario..." required>
+                                    <button type="submit">💬 Enviar</button>
+                                </form>
+                            </div>
+                            <div th:if="${usuario == null}" style="font-size:13px; color:#94a3b8; margin-top:8px;">
+                                🔑 <a href="/login" style="color:#4f46e5;">Inicia sesión</a> para comentar
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Si no hay guías -->
+                <div th:if="${guias.empty}" class="empty">
+                    <span class="icon">🔍</span>
+                    No hay guías disponibles para este destino
+                </div>
+            </div>
+        </div>
+        
+        <!-- Botón volver -->
+        <a href="/menu" class="volver-btn">← Volver al Menú</a>
     </div>
 </body>
 </html>

@@ -1,45 +1,307 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
     <title>Mis Reservas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body{font-family:Arial;background:#667eea;margin:0;padding:20px;}
-        .container{background:white;border-radius:20px;padding:20px;max-width:800px;margin:auto;}
-        table{width:100%;border-collapse:collapse;}
-        th,td{padding:10px;text-align:left;border-bottom:1px solid #ddd;}
-        th{background:#4f46e5;color:white;}
-        button{background:#64748b;color:white;border:none;border-radius:8px;padding:10px;margin-top:20px;cursor:pointer;}
-        .mensaje{text-align:center;padding:40px;color:#64748b;}
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0f1724 0%, #1a2a3a 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 28px;
+            padding: 40px;
+            max-width: 900px;
+            width: 100%;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+            animation: slideUp 0.4s ease;
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        /* ===== HEADER ===== */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            color: #0f1724;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .header h1 i {
+            color: #fbbf24;
+        }
+        
+        .header .badge {
+            background: #f1f5f9;
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-size: 14px;
+            color: #64748b;
+            font-weight: 500;
+        }
+        
+        .header .badge span {
+            font-weight: 700;
+            color: #0f1724;
+        }
+        
+        /* ===== TABLA ===== */
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        
+        thead {
+            background: linear-gradient(135deg, #0f1724, #1a2a3a);
+        }
+        
+        thead th {
+            color: white;
+            padding: 14px 16px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 13px;
+            letter-spacing: 0.3px;
+        }
+        
+        tbody td {
+            padding: 14px 16px;
+            border-bottom: 1px solid #f1f5f9;
+            color: #1a2a3a;
+        }
+        
+        tbody tr:hover {
+            background: #f8fafc;
+        }
+        
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 4px 14px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .status-badge.confirmada {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+        
+        .status-badge.pendiente {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .status-badge.cancelada {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        
+        /* ===== MENSAJE VACÍO ===== */
+        .empty-state {
+            text-align: center;
+            padding: 50px 20px 40px;
+        }
+        
+        .empty-state .icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+            display: block;
+        }
+        
+        .empty-state h2 {
+            font-size: 22px;
+            color: #0f1724;
+            margin-bottom: 8px;
+        }
+        
+        .empty-state p {
+            color: #64748b;
+            font-size: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .empty-state .btn-buscar {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 40px;
+            border-radius: 50px;
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: #0f1724;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 16px;
+            transition: all 0.3s;
+            box-shadow: 0 8px 25px rgba(251, 191, 36, 0.3);
+        }
+        
+        .empty-state .btn-buscar:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(251, 191, 36, 0.4);
+        }
+        
+        .empty-state .btn-buscar i {
+            font-size: 18px;
+        }
+        
+        /* ===== ACCIONES ===== */
+        .actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+        
+        .actions .btn {
+            padding: 10px 24px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .actions .btn-volver {
+            background: #f1f5f9;
+            color: #1a2a3a;
+        }
+        
+        .actions .btn-volver:hover {
+            background: #e2e8f0;
+            transform: translateY(-2px);
+        }
+        
+        .actions .btn-buscar-mini {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: #0f1724;
+        }
+        
+        .actions .btn-buscar-mini:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(251, 191, 36, 0.3);
+        }
+        
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 600px) {
+            .container { padding: 20px; }
+            .header h1 { font-size: 22px; }
+            .empty-state .icon { font-size: 48px; }
+            .empty-state h2 { font-size: 18px; }
+            .empty-state .btn-buscar { padding: 12px 28px; font-size: 14px; }
+            thead th, tbody td { padding: 10px 12px; font-size: 13px; }
+        }
     </style>
 </head>
 <body>
+
     <div class="container">
-        <h1>📋 Mis Reservas</h1>
         
-        <div th:if="${reservas.empty}" class="mensaje">
-            <p>✨ Aún no tienes reservas</p>
-            <p>¡Explora nuestros destinos y contrata un guía turístico!</p>
-            <button onclick="location.href='/buscar'">🔍 Buscar Guías</button>
+        <!-- HEADER -->
+        <div class="header">
+            <h1>
+                <i class="fas fa-receipt"></i> Mis Reservas
+            </h1>
+            <div class="badge">
+                📋 <span th:text="${reservas != null ? reservas.size() : 0}">0</span> reservas
+            </div>
         </div>
-        
-        <table th:if="${not reservas.empty}">
-            <thead>
-                <tr><th>ID</th><th>Guía</th><th>Destino</th><th>Fecha</th><th>Hora</th><th>Horas</th><th>Total</th></tr>
-            </thead>
-            <tbody>
-                <tr th:each="r : ${reservas}">
-                    <td th:text="${r.id}">?</td>
-                    <td th:text="${r.guia.nombre}">?</td>
-                    <td th:text="${r.guia.destino.ciudad}">?</td>
-                    <td th:text="${r.fecha}">?</td>
-                    <td th:text="${r.hora}">?</td>
-                    <td th:text="${r.horasContratadas}">?</td>
-                    <td th:text="'S/ ' + ${r.costoTotal}">?</td>
-                </tr>
-            </tbody>
-        </table>
-        
-        <button onclick="location.href='/menu'">← Volver al Menú</button>
+
+        <!-- ===== CON RESERVAS ===== -->
+        <div th:if="${reservas != null && !reservas.empty}">
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Guía</th>
+                            <th>Destino</th>
+                            <th>Fecha</th>
+                            <th>Hora</th>
+                            <th>Horas</th>
+                            <th>Total</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="r : ${reservas}">
+                            <td th:text="${r.id}">1</td>
+                            <td th:text="${r.guia.nombre}">Juan Pérez</td>
+                            <td th:text="${r.guia.destino.ciudad}">Cusco</td>
+                            <td th:text="${r.fecha}">10/07/2026</td>
+                            <td th:text="${r.hora}">10:00</td>
+                            <td th:text="${r.horasContratadas}">3</td>
+                            <td><strong>S/ <span th:text="${r.costoTotal}">150.00</span></strong></td>
+                            <td>
+                                <span class="status-badge confirmada">✅ Confirmada</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Acciones -->
+            <div class="actions">
+                <a href="/menu" class="btn btn-volver">
+                    <i class="fas fa-arrow-left"></i> Volver al Menú
+                </a>
+                <a href="/buscar" class="btn btn-buscar-mini">
+                    <i class="fas fa-search"></i> Buscar más guías
+                </a>
+            </div>
+        </div>
+
+        <!-- ===== SIN RESERVAS ===== -->
+        <div th:if="${reservas == null || reservas.empty}" class="empty-state">
+            <span class="icon">📭</span>
+            <h2>✨ Aún no tienes reservas</h2>
+            <p>Explora nuestros destinos y contrata un guía turístico<br>para vivir una experiencia única en Perú.</p>
+            <a href="/buscar" class="btn-buscar">
+                <i class="fas fa-compass"></i> Buscar Guías Turísticos
+            </a>
+        </div>
+
     </div>
+
 </body>
 </html>

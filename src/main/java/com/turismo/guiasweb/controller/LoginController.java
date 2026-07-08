@@ -2,6 +2,8 @@ package com.turismo.guiasweb.controller;
 
 import com.turismo.guiasweb.service.Usuarioservices;
 import com.turismo.guiasweb.model.Usuario;
+import com.turismo.guiasweb.model.Destino;            // ← NUEVO
+import com.turismo.guiasweb.model.DestinoRepository;  // ← NUEVO
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,6 +23,9 @@ public class LoginController {
     
     @Autowired
     private ReservaRepository reservaRepository;
+    
+    @Autowired
+    private DestinoRepository destinoRepository;  // ← NUEVO
     
     // Mostrar login
     @GetMapping("/")
@@ -56,7 +61,7 @@ public class LoginController {
         }
     }
     
-    // ========== PROCESAR LOGIN (ACTUALIZADO) ==========
+    // ========== PROCESAR LOGIN ==========
     @PostMapping("/login")
     public String procesarLogin(@RequestParam String email,
                                 @RequestParam String password,
@@ -67,7 +72,6 @@ public class LoginController {
         if (usuario != null) {
             session.setAttribute("usuario", usuario);
             
-            // ✅ NUEVO: Verificar si es ADMIN
             if ("ADMIN".equals(usuario.getRol())) {
                 return "redirect:/admin/dashboard";
             }
@@ -79,13 +83,18 @@ public class LoginController {
         }
     }
     
-    // Mostrar menú
+    // ========== MOSTRAR MENÚ (ACTUALIZADO) ==========
     @GetMapping("/menu")
     public String mostrarMenu(HttpSession session, Model model) {
         Usuario usuario = (Usuario) session.getAttribute("usuario");
         if (usuario == null) {
             return "redirect:/login";
         }
+        
+        // ===== AGREGAR DESTINOS PARA EL COMBO =====
+        List<Destino> destinos = destinoRepository.findAll();
+        model.addAttribute("destinos", destinos);
+        
         model.addAttribute("usuario", usuario);
         return "menu";
     }

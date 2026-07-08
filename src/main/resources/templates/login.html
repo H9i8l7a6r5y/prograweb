@@ -3,7 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Guías Turísticos Perú — Iniciar Sesión</title>
+    <title>IntiRoutes — Iniciar Sesión</title>
+    
+    <!-- ===== FONT AWESOME (ÍCONOS) ===== -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 
@@ -14,7 +19,6 @@
 
         body {
             font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            /* IMAGEN DE FONDO CON CAPA OSCURA */
             background: url('https://www.image2url.com/r2/default/images/1779401676136-ac287fd1-7679-4276-ad6b-33c34d4e9b43.png') no-repeat center center fixed;
             background-size: cover;
             min-height: 100vh;
@@ -27,19 +31,45 @@
         }
 
         .container {
-    /* FONDO BLANCO SÓLIDO O LIGERAMENTE TRASLÚCIDO SIN BORROSO */
-    background: rgba(255, 255, 255, 0.92); /* Un toque más opaco para que tus textos sigan siendo fáciles de leer */
-    padding: 40px 32px;
-    border-radius: 24px;
-    width: 100%;
-    max-width: 420px;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.5);
-}
+            background: rgba(255, 255, 255, 0.92);
+            padding: 40px 32px;
+            border-radius: 24px;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
 
         .header-zone {
             text-align: center;
             margin-bottom: 32px;
+        }
+
+        /* ===== ÍCONO PLANETA + AVIÓN ===== */
+        .logo-icon {
+            font-size: 48px;
+            color: #4f46e5;
+            display: block;
+            margin-bottom: 10px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .logo-icon .fa-earth-americas {
+            font-size: 48px;
+            color: #4f46e5;
+        }
+        
+        .logo-icon .fa-plane {
+            font-size: 20px;
+            color: #fbbf24;
+            position: absolute;
+            bottom: 2px;
+            right: -8px;
+            transform: rotate(45deg);
+            background: white;
+            border-radius: 50%;
+            padding: 2px;
         }
 
         .flag-badge {
@@ -80,6 +110,12 @@
             margin-bottom: 6px;
         }
 
+        .input-group label i {
+            color: #4f46e5;
+            margin-right: 6px;
+            font-size: 14px;
+        }
+
         input {
             width: 100%;
             padding: 14px 16px;
@@ -115,6 +151,10 @@
             cursor: pointer;
             box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
             margin-top: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
 
         button:hover {
@@ -165,30 +205,38 @@
 
     <div class="container">
         <div class="header-zone">
-            <div class="flag-badge">🇵🇪</div>
+            <!-- ===== ÍCONO PLANETA + AVIÓN ===== -->
+            <span class="logo-icon">
+                <i class="fas fa-earth-americas"></i>
+                <i class="fas fa-plane"></i>
+            </span>
+            
+            <div class="flag-badge"></div>
             <h1>IntiRoutes</h1>
             <p class="subtitle">Explora destinos e historias inolvidables</p>
         </div>
 
         <form action="/login" method="post">
             <div class="input-group">
-                <label for="email">Correo electrónico</label>
+                <label for="email"><i class="fas fa-envelope"></i> Correo electrónico</label>
                 <input type="email" id="email" name="email" placeholder="ejemplo@correo.com" required>
             </div>
             
             <div class="input-group">
-                <label for="password">Contraseña</label>
+                <label for="password"><i class="fas fa-lock"></i> Contraseña</label>
                 <input type="password" id="password" name="password" placeholder="••••••••" required>
             </div>
 
-            <button type="submit">Iniciar Sesión</button>
+            <button type="submit">
+                <i class="fas fa-arrow-right-to-bracket"></i> Iniciar Sesión
+            </button>
         </form>
 
         <div class="exito">
             <span>✨</span> Tu aplicación web está funcionando correctamente
         </div>
 
-        <p class="footer-text">¿No tienes cuenta? <a href="/registro">Regístrate aquí</a></p>
+        <p class="footer-text">¿No tienes cuenta? <a href="/registro"><i class="fas fa-user-plus"></i> Regístrate aquí</a></p>
     </div>
 
 </body>
