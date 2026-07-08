@@ -1,23 +1,23 @@
-# ===== ETAPA DE CONSTRUCCIÓN =====
+# ===== CONSTRUCCIÓN (BUILD STAGE) =====
 FROM maven:3.8.4-openjdk-17-slim AS build
 WORKDIR /app
 
-# Copiar archivos
+# Copiar archivos de configuración
 COPY pom.xml .
 COPY src ./src
 
-# Compilar
+# Compilar y empaquetar (saltando pruebas)
 RUN mvn clean package -DskipTests
 
-# ===== ETAPA DE EJECUCIÓN =====
+# ===== EJECUCIÓN (RUNTIME STAGE) =====
 FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
 
-# Copiar JAR
+# Copiar el JAR desde la etapa de construcción
 COPY --from=build /app/target/*.jar app.jar
 
-# Configurar puerto
+# Puerto de la aplicación
 EXPOSE 8080
 
-# Ejecutar
+# Comando para ejecutar
 ENTRYPOINT ["java", "-jar", "app.jar"]
