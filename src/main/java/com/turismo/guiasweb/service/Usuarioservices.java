@@ -12,19 +12,30 @@ public class Usuarioservices {
     @Autowired
     private UsuarioRepository usuarioRepository;
     
-    // 🔹 MÉTODO LOGIN (el que usa tu controlador)
+    // 🔹 MÉTODO LOGIN
     public Usuario login(String email, String password) {
         Optional<Usuario> usuario = usuarioRepository.findByEmailAndPassword(email, password);
         return usuario.orElse(null);
     }
     
-    // 🔹 MÉTODO REGISTRAR
+    // 🔹 MÉTODO REGISTRAR (ACTUALIZADO)
     public boolean registrar(Usuario usuario) {
         Optional<Usuario> existente = usuarioRepository.findByEmail(usuario.getEmail());
         if (existente.isPresent()) {
             return false;
         }
+        
+        // ✅ Si no tiene rol, asignar USER por defecto
+        if (usuario.getRol() == null || usuario.getRol().isEmpty()) {
+            usuario.setRol("USER");
+        }
+        
         usuarioRepository.save(usuario);
         return true;
+    }
+    
+    // 🔹 NUEVO: Obtener usuario por email
+    public Usuario buscarPorEmail(String email) {
+        return usuarioRepository.findByEmail(email).orElse(null);
     }
 }

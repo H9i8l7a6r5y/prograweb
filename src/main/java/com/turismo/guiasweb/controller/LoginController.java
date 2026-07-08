@@ -20,7 +20,7 @@ public class LoginController {
     private Usuarioservices usuarioservices;
     
     @Autowired
-     private ReservaRepository reservaRepository;
+    private ReservaRepository reservaRepository;
     
     // Mostrar login
     @GetMapping("/")
@@ -39,7 +39,7 @@ public class LoginController {
         return "registro";
     }
     
-    // PROCESAR REGISTRO (esto es lo que faltaba)
+    // PROCESAR REGISTRO
     @PostMapping("/registro")
     public String procesarRegistro(@RequestParam String nombre,
                                    @RequestParam String email,
@@ -56,7 +56,7 @@ public class LoginController {
         }
     }
     
-    // Procesar login
+    // ========== PROCESAR LOGIN (ACTUALIZADO) ==========
     @PostMapping("/login")
     public String procesarLogin(@RequestParam String email,
                                 @RequestParam String password,
@@ -66,6 +66,12 @@ public class LoginController {
         
         if (usuario != null) {
             session.setAttribute("usuario", usuario);
+            
+            // ✅ NUEVO: Verificar si es ADMIN
+            if ("ADMIN".equals(usuario.getRol())) {
+                return "redirect:/admin/dashboard";
+            }
+            
             return "redirect:/menu";
         } else {
             model.addAttribute("error", "Email o contraseña incorrectos");
@@ -90,16 +96,16 @@ public class LoginController {
         session.invalidate();
         return "redirect:/login";
     }
+    
     @GetMapping("/misreservas")
-public String mostrarMisReservas(HttpSession session, Model model) {
-    Usuario usuario = (Usuario) session.getAttribute("usuario");
-    if (usuario == null) {
-        return "redirect:/login";
+    public String mostrarMisReservas(HttpSession session, Model model) {
+        Usuario usuario = (Usuario) session.getAttribute("usuario");
+        if (usuario == null) {
+            return "redirect:/login";
+        }
+        
+        List<Reserva> reservas = reservaRepository.findByUsuarioId(usuario.getId());
+        model.addAttribute("reservas", reservas);
+        return "misreservas";
     }
-    
-    
-     List<Reserva> reservas = reservaRepository.findByUsuarioId(usuario.getId());
-    model.addAttribute("reservas", reservas);
-    return "misreservas";
-}
 }
