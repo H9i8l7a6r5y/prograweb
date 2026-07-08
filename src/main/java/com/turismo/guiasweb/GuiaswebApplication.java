@@ -1,17 +1,13 @@
-# ========== CONFIGURACIÓN PARA POSTGRESQL (RENDER) ==========
-spring.datasource.url=${SPRING_DATASOURCE_URL}
-spring.datasource.username=${SPRING_DATASOURCE_USERNAME}
-spring.datasource.password=${SPRING_DATASOURCE_PASSWORD}
-spring.datasource.driver-class-name=org.postgresql.Driver
+package com.turismo.guiasweb;
 
-# ========== JPA ==========
-spring.jpa.hibernate.ddl-auto=update
-spring.jpa.show-sql=true
-spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
-spring.jpa.properties.hibernate.format_sql=true
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-# ========== THYMELEAF ==========
-spring.thymeleaf.cache=false
+@SpringBootApplication
+public class GuiaswebApplication {
 
-# ========== PUERTO ==========
-server.port=8080
+    public static void main(String[] args) {
+        SpringApplication.run(GuiaswebApplication.class, args);
+    }
+
+}
