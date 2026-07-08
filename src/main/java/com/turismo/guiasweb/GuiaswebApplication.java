@@ -1,14 +1,17 @@
-package com.turismo.guiasweb;
+# ========== CONFIGURACIÓN PARA POSTGRESQL (RENDER) ==========
+spring.datasource.url=${SPRING_DATASOURCE_URL}
+spring.datasource.username=${SPRING_DATASOURCE_USERNAME}
+spring.datasource.password=${SPRING_DATASOURCE_PASSWORD}
+spring.datasource.driver-class-name=org.postgresql.Driver
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+# ========== JPA ==========
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+spring.jpa.properties.hibernate.format_sql=true
 
-@SpringBootApplication
-public class GuiaswebApplication {
+# ========== THYMELEAF ==========
+spring.thymeleaf.cache=false
 
-    public static void main(String[] args) {
-        // En Railway se usa SPRING_DATASOURCE_URL (variable de entorno)
-        // En local, si no hay variable, usará la ventana de configuración
-        SpringApplication.run(GuiaswebApplication.class, args);
-    }
-}
+# ========== PUERTO ==========
+server.port=8080
