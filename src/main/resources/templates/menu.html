@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,15 +15,14 @@
             align-items: center;
         }
 
-      
         .gif-fondo {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Esto estira el GIF para que ocupe todo sin espacios */
-            z-index: -1;       /* Esto lo envía al fondo */
+            object-fit: cover;
+            z-index: -1;
         }
 
         .container {
@@ -32,13 +30,9 @@
             padding: 40px;
             border-radius: 30px;
             text-align: center;
-            width: 350px; 
+            width: 400px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.2);
         }
-
-        .btn-buscar { width: 80%; background: #4ade80; }
-        .btn-reservas { width: 90%; background: #6fe8d0; }
-        .btn-logout { width: 60%; background: #5ac4f2; }
 
         button {
             padding: 15px;
@@ -49,6 +43,7 @@
             font-size: 16px;
             cursor: pointer;
             transition: 0.3s;
+            width: 80%;
         }
 
         button:hover {
@@ -56,11 +51,30 @@
             transform: scale(1.05);
         }
 
+        .btn-buscar { background: #4ade80; }
+        .btn-reservas { background: #6fe8d0; }
+        .btn-logout { background: #5ac4f2; }
+        .btn-admin { background: #e67e22; }  /* NUEVO: color naranja para admin */
+
         h1 {
-       
-        font-family: 'Poppins', sans-serif;
-        color: #1e293b;
-    }
+            font-family: 'Poppins', sans-serif;
+            color: #1e293b;
+        }
+        
+        .user-info {
+            color: #555;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+        
+        .user-info strong {
+            color: #2c3e50;
+        }
+        
+        .separator {
+            border-top: 1px solid #ddd;
+            margin: 15px 0;
+        }
     </style>
 </head>
 <body>
@@ -68,9 +82,23 @@
     <img src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExYzM1NzAydGk3bmQ2OTI2bW5mNnk4ejM3eWJyMDZyMTRxbWJndG51MSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/geF19mYy3WhjOORozx/giphy.gif" class="gif-fondo" alt="Fondo animado">
 
     <div class="container">
-        <h1>INTI ROUTES Bienvenido</h1>
+        <h1>🌍 INTI ROUTES</h1>
+        
+        <!-- Mostrar nombre del usuario -->
+        <div class="user-info">
+            👤 Bienvenido, <strong th:text="${usuario.nombre}">Usuario</strong>
+        </div>
+        
         <button class="btn-buscar" onclick="location.href='/buscar'">🔍 Buscar Guías</button>
         <button class="btn-reservas" onclick="location.href='/misreservas'">📋 Mis Reservas</button>
+        
+        <!-- ✅ NUEVO: Botón de Admin SOLO si el usuario es ADMIN -->
+        <div th:if="${usuario.rol == 'ADMIN'}">
+            <div class="separator"></div>
+            <button class="btn-admin" onclick="location.href='/admin/dashboard'">🔧 Panel de Administración</button>
+        </div>
+        
+        <div class="separator"></div>
         <button class="btn-logout" onclick="location.href='/logout'">🚪 Cerrar Sesión</button>
     </div>
 </body>

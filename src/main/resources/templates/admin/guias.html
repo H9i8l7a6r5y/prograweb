@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Gestionar Guías</title>
+    <style>
+        body { font-family: Arial; margin: 0; padding: 20px; background: #f4f4f4; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .header { background: #2c3e50; color: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .header a { color: #e74c3c; text-decoration: none; }
+        .header a:hover { text-decoration: underline; }
+        .actions { margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap; }
+        .actions a { background: #2c3e50; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; }
+        .actions a:hover { background: #1a252f; }
+        .actions a.back { background: #95a5a6; }
+        .actions a.back:hover { background: #7f8c8d; }
+        table { width: 100%; background: white; border-collapse: collapse; border-radius: 10px; overflow: hidden; }
+        th { background: #2c3e50; color: white; padding: 12px; text-align: left; }
+        td { padding: 12px; border-bottom: 1px solid #eee; }
+        tr:hover { background: #f8f9fa; }
+        .btn { padding: 5px 10px; border-radius: 3px; text-decoration: none; color: white; }
+        .btn-edit { background: #3498db; }
+        .btn-edit:hover { background: #2980b9; }
+        .btn-delete { background: #e74c3c; }
+        .btn-delete:hover { background: #c0392b; }
+        .empty { text-align: center; padding: 30px; color: #999; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>👥 Guías Turísticos</h1>
+            <span>👤 <span th:text="${usuario.nombre}">Admin</span> | <a href="/logout">Cerrar Sesión</a></span>
+        </div>
+        
+        <div class="actions">
+            <a href="/admin/guias/nuevo">➕ Agregar Guía</a>
+            <a href="/admin/dashboard" class="back">⬅ Volver al Panel</a>
+        </div>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Idioma</th>
+                    <th>Tarifa/hora</th>
+                    <th>Puntuación</th>
+                    <th>Disponible</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="guia : ${guias}">
+                    <td th:text="${guia.id}">1</td>
+                    <td th:text="${guia.nombre}">Juan</td>
+                    <td th:text="${guia.idioma}">Español</td>
+                    <td>S/ <span th:text="${guia.tarifaHora}">50.00</span></td>
+                    <td th:text="${guia.puntuacion}">4.5</td>
+                    <td th:text="${guia.disponibilidad == 1 ? '✅ Sí' : '❌ No'}">Sí</td>
+                    <td>
+                        <a th:href="'/admin/guias/editar/' + ${guia.id}" class="btn btn-edit">✏️ Editar</a>
+                        <a th:href="'/admin/guias/eliminar/' + ${guia.id}" class="btn btn-delete" onclick="return confirm('¿Eliminar este guía?')">🗑️</a>
+                    </td>
+                </tr>
+                <tr th:if="${guias.empty}">
+                    <td colspan="7" class="empty">📭 No hay guías registrados</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
